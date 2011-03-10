@@ -141,7 +141,16 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	 */
 	protected function parseLevel($level)
 	{
-		return $level;
+		if (is_numeric($level))
+			return (int) $level;
+		else {
+			$loggerInterface = 'Logger\ILogger';
+			$reflection = new ClassReflection($loggerInterface);
+			if ($reflection->hasConstant((string) $level))
+				return $reflection->getConstant((string) $level);
+			else
+				throw new InvalidArgumentException('Unknown priority level: ' . $level);
+		}
 	}
 	
 	/**

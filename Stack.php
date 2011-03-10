@@ -2,6 +2,7 @@
 
 namespace Logger;
 
+use Nette\Config\Config;
 use Nette\Object;
 
 /**
@@ -30,9 +31,11 @@ class Stack extends \Nette\Object implements \Logger\ILogger
 	/**
 	 * @param array $loggers
 	 */
-	public function __construct(array $loggers)
+	public function __construct(array $options)
 	{
-		$this->setLoggers($loggers);
+		if (isset($options['loggers'])) {
+			$this->setLoggers($options['loggers']);
+		}
 	}
 
 	/**
@@ -47,8 +50,12 @@ class Stack extends \Nette\Object implements \Logger\ILogger
 	/**
 	 * @param array $loggers
 	 */
-	public function setLoggers(array $loggers)
+	public function setLoggers($loggers)
 	{
+		if ($loggers instanceof Config) {
+			$loggers = $loggers->toArray();
+		}
+
 		$this->checkLoggers($loggers);
 		$this->loggers = $loggers;
 	}
