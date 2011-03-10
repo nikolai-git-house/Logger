@@ -1,21 +1,21 @@
 <?php
 
-namespace Nette\Logger;
+namespace Logger;
 
 /**
  * Logger writing messages to standard output
  *
  * @version    0.6
- * @package    Nette\Logger
+ * @package    Logger
  *
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-class OutputLogger extends \Nette\Logger\AbstractLogger
+class OutputLogger extends \Logger\AbstractLogger
 {
 
 	/**
-	 * @see Nette\Logger\ILogger::logMessage()
+	 * @see Logger\ILogger::logMessage()
 	 */
 	public function logMessage($level, $message = NULL)
 	{

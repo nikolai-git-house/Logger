@@ -1,6 +1,6 @@
 <?php
 
-namespace Nette\Logger;
+namespace Logger;
 
 use Nette\Reflection\ClassReflection;
 use Nette\Environment;
@@ -9,7 +9,7 @@ use Nette\Environment;
  * Abstract Logger class offering base logging functionality
  *
  * @version    0.6
- * @package    Nette\Logger
+ * @package    Logger
  *
  * @author     Jan Smitka <jan@smitka.org>
  * @author     Martin Pecka <martin.pecka@clevis.cz>
@@ -18,7 +18,7 @@ use Nette\Environment;
  * @copyright  Copyright (c) 2009-2010 Martin Pecka
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-abstract class AbstractLogger extends \Nette\Object implements \Nette\Logger\ILogger
+abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 {
 
 	/**
@@ -58,7 +58,7 @@ abstract class AbstractLogger extends \Nette\Object implements \Nette\Logger\ILo
 	}
 
 	/**
-	 * @see Nette\Logger\ILogger::logMessage()
+	 * @see Logger\ILogger::logMessage()
 	 */
 	public function logMessage($level, $message = null)
 	{

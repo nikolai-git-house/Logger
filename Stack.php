@@ -1,6 +1,6 @@
 <?php
 
-namespace Nette\Logger;
+namespace Logger;
 
 use Nette\Object;
 
@@ -8,12 +8,12 @@ use Nette\Object;
  * Nette logger stack. Logs message for each inserted logger
  *
  * @version    0.6
- * @package    Nette\Logger
+ * @package    Logger
  *
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-class Stack extends \Nette\Object implements \Nette\Logger\ILogger
+class Stack extends \Nette\Object implements \Logger\ILogger
 {
 
 	/**
@@ -36,7 +36,7 @@ class Stack extends \Nette\Object implements \Nette\Logger\ILogger
 	}
 
 	/**
-	 * @param \Nette\Logger\ILogger $logger
+	 * @param \Logger\ILogger $logger
 	 */
 	public function addLogger(ILogger $logger)
 	{
@@ -74,7 +74,7 @@ class Stack extends \Nette\Object implements \Nette\Logger\ILogger
 	}
 
 	/**
-	 * @see Nette\Logger\ILogger::logMessage()
+	 * @see Logger\ILogger::logMessage()
 	 */
 	public function logMessage($level, $message = NULL)
 	{
@@ -121,7 +121,7 @@ class Stack extends \Nette\Object implements \Nette\Logger\ILogger
 			$loggers,
 			function($logger, $key) {
 				if (false === $logger instanceof ILogger) {
-					throw new \InvalidArgumentException('Stack accepts only objects implementing \Nette\Logger\ILogger interface');
+					throw new \InvalidArgumentException('Stack accepts only objects implementing \Logger\ILogger interface');
 				}
 			}
 		);

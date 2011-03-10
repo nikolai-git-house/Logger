@@ -1,12 +1,12 @@
 <?php
 
-namespace Nette\Logger;
+namespace Logger;
 
 /**
  * Basic interface for logging
  *
  * @version    0.6
- * @package    Nette\Logger
+ * @package    Logger
  *
  * @author     Jan Smitka <jan@smitka.org>
  * @author     Martin Pecka <martin.pecka@clevis.cz>

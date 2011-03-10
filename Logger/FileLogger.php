@@ -1,6 +1,6 @@
 <?php
 
-namespace Nette\Logger;
+namespace Logger;
 
 use Nette\Environment;
 use Nette\Object;
@@ -10,7 +10,7 @@ use Nette\String;
  * Filesystem-based implementation of ILogger.
  *
  * @version    0.6
- * @package    Nette\Logger
+ * @package    Logger
  * 
  * @author     Jan Smitka <jan@smitka.org>
  * @author     Martin Pecka <martin.pecka@clevis.cz>
@@ -19,7 +19,7 @@ use Nette\String;
  * @copyright  Copyright (c) 2009-2010 Martin Pecka
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-class FileLogger extends \Nette\Logger\AbstractLogger
+class FileLogger extends \Logger\AbstractLogger
 {
 	/**
 	 * Mask of the log filename, it can contain strftime specifiers
@@ -193,7 +193,7 @@ class FileLogger extends \Nette\Logger\AbstractLogger
 
 
 	/**
-	 * @see Nette\Logger\ILogger::logMessage()
+	 * @see Logger\ILogger::logMessage()
 	 *
 	 * @throws InvalidArgumentException if the given level is not one of the priority constants, or the message is not specified
 	 * @throws IOException if the file operation fails
