@@ -5,6 +5,8 @@ namespace Logger;
 use Nette\Reflection\ClassReflection;
 use Nette\Environment;
 
+use InvalidArgumentException;
+
 /**
  * Abstract Logger class offering base logging functionality
  *
