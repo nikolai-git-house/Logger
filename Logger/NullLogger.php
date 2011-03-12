@@ -13,4 +13,11 @@ namespace Logger;
  */
 class NullLogger extends \Logger\AbstractLogger
 {
+	/**
+	 * Dummy implementation of abstract method of parent
+	 *
+	 * @param mixed $level
+	 * @param string $message
+	 */
+	public function writeMessage($level, $message) {}
 }

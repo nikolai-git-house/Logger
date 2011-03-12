@@ -82,45 +82,18 @@ class Stack extends \Nette\Object implements \Logger\ILogger
 
 	/**
 	 * @see Logger\ILogger::logMessage()
+	 *
+	 * Logs message for each registered logger.
 	 */
 	public function logMessage($level, $message = NULL)
 	{
-		var_dump($level);
-
-		if (empty($this->loggers)) {
-			throw new \InvalidStateException('No loggers in stack');
-		}
-
-		$args = func_get_args();
-
-		if (is_string($level)) {
-			$message = $level;
-			$level = $this->defaultLogLevel;
-			array_shift($args);
-		} else {
-			if ($message === NULL) {
-				throw new InvalidArgumentException('The message has to be specified.');
-			}
-			array_shift($args); // Remove level
-			array_shift($args); // Remove message
-		}
-
-		if ($level > AbstractLogger::DEBUG || $level < AbstractLogger::EMERGENCY)
-			throw new InvalidArgumentException('Log level must be one of the priority constants.');
-
-		if (!empty($args)) {
-			$message = vsprintf($message, $args);
-		}
-
-		$params = array_merge(array($level, $message) + $args);
 		foreach ($this->loggers as $logger) {
-			call_user_func_array(array($logger, 'logMessage'), $params);
+			call_user_func_array(array($logger, 'logMessage'), func_get_args());
 		}
-
 	}
 
 	/**
-	 * @param array $loggers
+	 * @param array of Logger\ILogger $loggers
 	 */
 	private function checkLoggers($loggers)
 	{

@@ -191,48 +191,22 @@ class FileLogger extends \Logger\AbstractLogger
 		return $this->file;
 	}
 
-
 	/**
-	 * @see Logger\ILogger::logMessage()
-	 *
-	 * @throws InvalidArgumentException if the given level is not one of the priority constants, or the message is not specified
-	 * @throws IOException if the file operation fails
+	 * @see Logger\ILogger::writeMessage()
 	 */
-	public function logMessage($level, $message = NULL)
+	protected function writeMessage($level, $message)
 	{
-		if ($this->minimumLogLevel === FALSE)
-			return;
-
-		$args = func_get_args();
-
-		if (is_string($level)) {
-			$message = $level;
-			$level = $this->defaultLogLevel;
-			array_shift($args);
-		} else {
-			if ($message === NULL)
-				throw new InvalidArgumentException('The message has to be specified.');
-			array_shift($args); array_shift($args);
+		if (!file_exists($this->getFile())) {
+			$this->onLogFileCreated($this, $this->getFile());
 		}
 
-		if ($level > self::DEBUG || $level < self::EMERGENCY)
-			throw new InvalidArgumentException('Log level must be one of the priority constants.');
+		// Please note that FILE_APPEND operation is atomic (tested):
+		// http://us2.php.net/manual/en/function.file-put-contents.php
+		if (!file_put_contents($this->getFile(), $message, FILE_APPEND))
+			throw new \IOException('Write operation failed.');
 
-		if ($level <= $this->minimumLogLevel) {
-			if (!empty($args)) {
-				$message = vsprintf($message, $args);
-			}
-
-			if (!file_exists($this->getFile()))
-				$this->onLogFileCreated($this, $this->getFile());
-
-			// Please note that FILE_APPEND operation is atomic (tested):
-			// http://us2.php.net/manual/en/function.file-put-contents.php
-			if (!file_put_contents($this->getFile(), sprintf("%s %s [mem(real/peak):%0.2fMB/%0.2fMB] ===> %s\n", date($this->dateFormat), $this->logLevelToString($level), (memory_get_usage(TRUE) / 1000000), (memory_get_peak_usage() / 1000000), $message), FILE_APPEND))
-				throw new IOException('Write operation failed.');
-
-			$this->onMessage($this, $level, $message);
-		}
+		$this->onMessage($this, $level, $message);
+		
 	}
 
 }

@@ -26,17 +26,32 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	/**
 	 * @var int|bool
 	 */
-	private $minimumLogLevel;
+	protected $minimumLogLevel;
 
 	/**
 	 * @var int
 	 */
-	private $defaultLogLevel = self::INFO;
+	protected $defaultLogLevel = self::INFO;
 
 	/**
 	 * @var string
 	 */
-	private $dateFormat = 'c';
+	protected $dateFormat = 'c';
+
+	/**
+	 * @var string
+	 */
+	protected $messageTemplate = "%date% %level% %memory% ===> %message%\n";
+
+	/**
+	 * @var array
+	 */
+	protected $messagePlaceholders = array(
+		'%date%' => '%s',
+		'%level%' => '%s',
+		'%memory%' => 'mem(real/peak):%0.2fMB/%0.2fMB',
+		'%message%' => '%s',
+	);
 
 	/**
 	 *
@@ -64,9 +79,60 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	 */
 	public function logMessage($level, $message = null)
 	{
-
+		$params = call_user_func_array(array($this, 'prepareMessage'), func_get_args());
+		$this->writeMessage($params['level'], $params['message']);
 	}
 
+	/**
+	 * Prepares message from parameters.
+	 * 
+	 * If first parameter is not an integer, it is used as a message.
+	 * All following parameters are used as replacements of sprintf placeholders in the message.
+	 *
+	 * @param mixed $level
+	 * @param string $message
+	 * @return array
+	 */
+	protected function prepareMessage($level, $message = null)
+	{
+		$args = func_get_args();
+
+		if (is_string($level)) {
+			$message = $level;
+			$level = $this->defaultLogLevel;
+			array_shift($args);
+		} else {
+			if ($message === NULL) {
+				throw new InvalidArgumentException('The message has to be specified.');
+			}
+			array_shift($args); // Remove level
+			array_shift($args); // Remove message
+		}
+
+		if (!empty($args)) {
+			$message = vsprintf($message, $args);
+		}
+
+		$sprintf = str_replace(array_keys($this->messagePlaceholders), $this->messagePlaceholders, $this->messageTemplate);
+		$message = sprintf(
+			$sprintf,
+			date($this->dateFormat),
+			$this->logLevelToString($level),
+			(memory_get_usage(TRUE) / 1000000),
+			(memory_get_peak_usage() / 1000000),
+			$message
+		);
+
+		return array('level' => $level, 'message' => $message);
+	}
+
+	/**
+	 * Abstract method for further implementation. Does actual outputing prepared log message
+	 *
+	 * @param integer $level
+	 * @param string $message
+	 */
+	abstract protected function writeMessage($level, $message);
 
 	/**
 	 * Returns the logger verbosity.
