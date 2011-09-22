@@ -4,14 +4,14 @@ namespace Logger;
 
 use Nette\Environment;
 use Nette\Object;
-use Nette\String;
+use Nette\Utils\Strings;
 
 /**
  * Filesystem-based implementation of ILogger.
  *
  * @version    0.6
  * @package    Logger
- * 
+ *
  * @author     Jan Smitka <jan@smitka.org>
  * @author     Martin Pecka <martin.pecka@clevis.cz>
  * @author     Matěj Humpál <finwe@finwe.info>
@@ -45,7 +45,7 @@ class FileLogger extends \Logger\AbstractLogger
 	/**
 	 * Array of functions called after the message has been written
 	 *
-	 * @var array of function(FileLogger $logger, int $level, string $message); 
+	 * @var array of function(FileLogger $logger, int $level, string $message);
 	 */
 	public $onMessage = array();
 
@@ -184,7 +184,7 @@ class FileLogger extends \Logger\AbstractLogger
 				$timestamp = time();
 
 			$this->file = ($path = Environment::expand($this->logDir))
-				    . (String::endsWith($path, '/') ? '' : '/')
+				    . (Strings::endsWith($path, '/') ? '' : '/')
 				    . strftime($this->filenameMask, $timestamp);
 		}
 
@@ -206,7 +206,7 @@ class FileLogger extends \Logger\AbstractLogger
 			throw new \IOException('Write operation failed.');
 
 		$this->onMessage($this, $level, $message);
-		
+
 	}
 
 }
