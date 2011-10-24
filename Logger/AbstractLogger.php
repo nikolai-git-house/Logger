@@ -55,7 +55,7 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 
 	/**
 	 *
-	 * @param <type> $options 
+	 * @param <type> $options
 	 */
 	public function __construct($options = array())
 	{
@@ -79,13 +79,16 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	 */
 	public function logMessage($level, $message = null)
 	{
+		if ($level > $this->minimumLogLevel) {
+			return;
+		}
 		$params = call_user_func_array(array($this, 'prepareMessage'), func_get_args());
 		$this->writeMessage($params['level'], $params['message']);
 	}
 
 	/**
 	 * Prepares message from parameters.
-	 * 
+	 *
 	 * If first parameter is not an integer, it is used as a message.
 	 * All following parameters are used as replacements of sprintf placeholders in the message.
 	 *
@@ -220,7 +223,7 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 				throw new InvalidArgumentException('Unknown priority level: ' . $level);
 		}
 	}
-	
+
 	/**
 	 * Translate log severity level into a human-readable string.
 	 * @param int $level one of priority constants
