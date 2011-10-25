@@ -11,13 +11,13 @@ namespace Logger;
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-class OutputLoggerFactory extends \Nette\Object
+class OutputLoggerFactory extends \Nette\Object implements \Logger\ILoggerFactory
 {
 	/**
 	 * @param array $options
 	 * @return Logger\OutputLogger
 	 */
-	public static function factory($options = array())
+	public function factory($options = array())
 	{
 		return new OutputLogger($options);
 	}

@@ -11,13 +11,13 @@ namespace Logger;
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-class FileLoggerFactory extends \Nette\Object
+class FileLoggerFactory extends \Nette\Object implements \Logger\ILoggerFactory
 {
 	/**
 	 * @param array $options
 	 * @return Logger\FileLogger
 	 */
-	public static function factory($options = array())
+	public function factory($options = array())
 	{
 		return new FileLogger($options);
 	}
