@@ -11,13 +11,13 @@ namespace Logger;
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-class NullLogger extends \Logger\AbstractLogger
+class NullLogger implements \Logger\ILogger
 {
 	/**
-	 * Dummy implementation of abstract method of parent
+	 * Dummy implementation
 	 *
 	 * @param mixed $level
 	 * @param string $message
 	 */
-	public function writeMessage($level, $message) {}
+	public function logMessage($level, $message = NULL) {}
 }
