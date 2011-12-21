@@ -79,10 +79,12 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	 */
 	public function logMessage($level, $message = null)
 	{
-		if ($level > $this->minimumLogLevel) {
+		$params = call_user_func_array(array($this, 'prepareMessage'), func_get_args());
+
+		if ($params['level'] > $this->minimumLogLevel) {
 			return;
 		}
-		$params = call_user_func_array(array($this, 'prepareMessage'), func_get_args());
+		
 		$this->writeMessage($params['level'], $params['message']);
 	}
 
