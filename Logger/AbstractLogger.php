@@ -18,7 +18,7 @@ use InvalidArgumentException;
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2009-2010 Jan Smitka
  * @copyright  Copyright (c) 2009-2010 Martin Pecka
- * @copyright  Copyright (c) 2011 Matěj Humpál
+ * @copyright  Copyright (c) 2011-2012 Matěj Humpál
  */
 abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 {
@@ -69,6 +69,10 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 			$this->setDefaultLogLevel($this->parseLevel($options['defaultLogLevel']));
 		}
 
+		if (isset($options['messageTemplate'])) {
+			$this->setMessageTemplate($options['messageTemplate']);
+		}
+
 		if (isset($options['dateFormat'])) {
 			$this->setDateFormat($options['dateFormat']);
 		}
@@ -84,7 +88,7 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 		if ($params['level'] > $this->minimumLogLevel) {
 			return;
 		}
-		
+
 		$this->writeMessage($params['level'], $params['message']);
 	}
 
@@ -205,6 +209,25 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	public function setDateFormat($dateFormat)
 	{
 		$this->dateFormat = $dateFormat;
+	}
+
+	/**
+	 * Returns message template
+	 * @return string
+	 */
+	public function getMessageTemplate()
+	{
+		return $this->messageTemplate;
+	}
+
+	/**
+	 * Sets message template for logging
+	 *
+	 * @param string $messageTemplate
+	 */
+	public function setMessageTemplate($messageTemplate)
+	{
+		$this->messageTemplate = $messageTemplate;
 	}
 
 	/**
