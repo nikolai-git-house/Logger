@@ -17,7 +17,7 @@ use Nette\Utils\Strings;
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2009-2010 Jan Smitka
  * @copyright  Copyright (c) 2009-2010 Martin Pecka
- * @copyright  Copyright (c) 2011 Matěj Humpál
+ * @copyright  Copyright (c) 2011-2012 Matěj Humpál
  */
 class FileLogger extends \Logger\AbstractLogger
 {
@@ -69,10 +69,6 @@ class FileLogger extends \Logger\AbstractLogger
 
 		parent::__construct($options);
 
-		if (isset($options['filenameMask'])) {
-			$this->setFilenameMask($options['filenameMask']);
-		}
-
 		if (isset($options['logDir'])) {
 			$this->setLogDir($options['logDir']);
 		}
@@ -82,7 +78,7 @@ class FileLogger extends \Logger\AbstractLogger
 		}
 
 		if (isset($options['filenameMask'])) {
-			$this->filenameMask = $options['filenameMask'];
+			$this->setFilenameMask($options['filenameMask']);
 		}
 
 	}
