@@ -123,16 +123,62 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 		}
 
 		$sprintf = str_replace(array_keys($this->messagePlaceholders), $this->messagePlaceholders, $this->messageTemplate);
-		$message = sprintf(
+		$message = vsprintf(
 			$sprintf,
-			date($this->dateFormat),
-			$this->logLevelToString($level),
-			(memory_get_usage(TRUE) / 1000000),
-			(memory_get_peak_usage() / 1000000),
-			$message
+			$this->prepareParamsFromPlaceholders($level, $message)
 		);
 
 		return array('level' => $level, 'message' => $message);
+	}
+
+	/**
+	 * Builds array of vsprintf parameters based on message placeholders and their position
+	 *
+	 * @param type $level
+	 * @param type $message
+	 * @return type
+	 */
+	private function prepareParamsFromPlaceholders($level, $message = null)
+	{
+		$positions = array();
+
+		foreach (array_keys($this->messagePlaceholders) as $placeholder) {
+			$pos = strpos($this->messageTemplate, $placeholder);
+			if (false !== $pos) {
+				$positions[$placeholder] = $pos;
+			}
+		}
+
+		asort($positions);
+
+		if (isset($positions['%date%'])) {
+			$positions['%date%'] = date($this->dateFormat);
+		}
+		if (isset($positions['%level%'])) {
+			$positions['%level%'] = $this->logLevelToString($level);
+		}
+		if (isset($positions['%memory%'])) {
+			$positions['%memory%'] = array(
+				(memory_get_usage(TRUE) / 1000000),
+				(memory_get_peak_usage() / 1000000)
+			);
+		}
+		if (isset($positions['%message%'])) {
+			$positions['%message%'] = $message;
+		}
+
+		$params = array();
+		foreach ($positions as $value) {
+			if (is_array($value)) {
+				foreach ($value as $svalue) {
+					$params[] = $svalue;
+				}
+			} else {
+				$params[] = $value;
+			}
+		}
+
+		return $params;
 	}
 
 	/**
