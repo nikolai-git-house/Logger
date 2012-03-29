@@ -8,7 +8,7 @@ use ReflectionClass;
 /**
  * Abstract Logger class offering base logging functionality
  *
- * @version    0.6
+ * @version    0.7
  * @package    Logger
  *
  * @author     Jan Smitka <jan@smitka.org>

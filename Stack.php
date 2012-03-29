@@ -5,7 +5,7 @@ namespace Logger;
 /**
  * Logger stack. Logs message for each inserted logger
  *
- * @version    0.6
+ * @version    0.7
  * @package    Logger
  *
  * @author     Matěj Humpál <finwe@finwe.info>

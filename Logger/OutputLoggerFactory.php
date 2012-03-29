@@ -5,7 +5,7 @@ namespace Logger;
 /**
  * Factory for OutputLogger
  *
- * @version    0.6
+ * @version    0.7
  * @package    Logger
  *
  * @author     Matěj Humpál <finwe@finwe.info>

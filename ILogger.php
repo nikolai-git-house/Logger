@@ -5,7 +5,7 @@ namespace Logger;
 /**
  * Basic interface for logging
  *
- * @version    0.6
+ * @version    0.7
  * @package    Logger
  *
  * @author     Jan Smitka <jan@smitka.org>
@@ -68,7 +68,7 @@ interface ILogger
 
 	/**
 	 * Logs a message.
-	 * 
+	 *
 	 * If first parameter is a string, uses it as a message.
 	 * All other parameters are used as sprintf replacements to a message
 	 *

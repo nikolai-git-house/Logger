@@ -5,7 +5,7 @@ namespace Logger;
 /**
  * Filesystem-based implementation of ILogger.
  *
- * @version    0.6
+ * @version    0.7
  * @package    Logger
  *
  * @author     Jan Smitka <jan@smitka.org>
