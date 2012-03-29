@@ -2,11 +2,8 @@
 
 namespace Logger;
 
-use Nette\Config\Config;
-use Nette\Object;
-
 /**
- * Nette logger stack. Logs message for each inserted logger
+ * Logger stack. Logs message for each inserted logger
  *
  * @version    0.6
  * @package    Logger
@@ -14,19 +11,13 @@ use Nette\Object;
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-class Stack extends \Nette\Object implements \Logger\ILogger
+class Stack implements \Logger\ILogger
 {
 
 	/**
 	 * @var array
 	 */
 	protected $loggers = array();
-
-	/**
-	 *
-	 * @var integer
-	 */
-	protected $defaultLogLevel = self::INFO;
 
 	/**
 	 * @param array $loggers
@@ -43,7 +34,6 @@ class Stack extends \Nette\Object implements \Logger\ILogger
 	 */
 	public function addLogger(ILogger $logger)
 	{
-		$this->checkLoggers(array($logger));
 		$this->loggers[] = $logger;
 	}
 
@@ -52,32 +42,8 @@ class Stack extends \Nette\Object implements \Logger\ILogger
 	 */
 	public function setLoggers($loggers)
 	{
-		if ($loggers instanceof Config) {
-			$loggers = $loggers->toArray();
-		}
-
 		$this->checkLoggers($loggers);
 		$this->loggers = $loggers;
-	}
-
-	/**
-	 * Returns the logger verbosity.
-	 * @return int
-	 */
-	public function getDefaultLogLevel()
-	{
-		return $this->minimumLogLevel;
-	}
-
-	/**
-	 * Sets the defalut level of logged messages.
-	 * @param int $level one of the priority constants
-	 */
-	public function setDefaultLogLevel($level)
-	{
-		if ($level > self::DEBUG || $level < self::EMERGENCY)
-			throw new InvalidArgumentException('Log level must be one of the priority constants.');
-		$this->defaultLogLevel = $level;
 	}
 
 	/**

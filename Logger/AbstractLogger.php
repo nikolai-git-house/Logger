@@ -2,10 +2,8 @@
 
 namespace Logger;
 
-use Nette\Reflection\ClassReflection;
-use Nette\Environment;
-
 use InvalidArgumentException;
+use ReflectionClass;
 
 /**
  * Abstract Logger class offering base logging functionality
@@ -20,7 +18,7 @@ use InvalidArgumentException;
  * @copyright  Copyright (c) 2009-2010 Martin Pecka
  * @copyright  Copyright (c) 2011-2012 Matěj Humpál
  */
-abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
+abstract class AbstractLogger implements \Logger\ILogger
 {
 
 	/**
@@ -31,7 +29,7 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	/**
 	 * @var int
 	 */
-	protected $defaultLogLevel = self::INFO;
+	protected $defaultLogLevel = ILogger::INFO;
 
 	/**
 	 * @var string
@@ -62,7 +60,7 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 		if (isset($options['minimumLogLevel'])) {
 			$this->setMinimumLogLevel($this->parseLevel($options['minimumLogLevel']));
 		} else {
-			$this->setMinimumLogLevel(Environment::isProduction() ? self::INFO : self::DEBUG);
+			$this->setMinimumLogLevel(ILogger::INFO);
 		}
 
 		if (isset($options['defaultLogLevel'])) {
@@ -106,13 +104,13 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	{
 		$args = func_get_args();
 
-		if (is_string($level)) {
+		if (!preg_match('/^\d+$/', $level)) {
 			$message = $level;
 			$level = $this->defaultLogLevel;
 			array_shift($args);
 		} else {
 			if ($message === NULL) {
-				throw new InvalidArgumentException('The message has to be specified.');
+				throw new \InvalidArgumentException('The message has to be specified.');
 			}
 			array_shift($args); // Remove level
 			array_shift($args); // Remove message
@@ -206,8 +204,9 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	 */
 	public function setMinimumLogLevel($level)
 	{
+		$level = $this->parseLevel($level);
 		if ($level !== FALSE && ($level > self::DEBUG || $level < self::EMERGENCY)) {
-			throw new InvalidArgumentException('Log level must be one of the priority constants.');
+			throw new \InvalidArgumentException('Log level must be one of the priority constants.');
 		}
 		$this->minimumLogLevel = $level;
 	}
@@ -229,8 +228,9 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 	 */
 	public function setDefaultLogLevel($level)
 	{
+		$level = $this->parseLevel($level);
 		if ($level > self::DEBUG || $level < self::EMERGENCY)
-			throw new InvalidArgumentException('Log level must be one of the priority constants.');
+			throw new \InvalidArgumentException('Log level must be one of the priority constants.');
 		$this->defaultLogLevel = $level;
 	}
 
@@ -287,7 +287,7 @@ abstract class AbstractLogger extends \Nette\Object implements \Logger\ILogger
 			return (int) $level;
 		else {
 			$loggerInterface = 'Logger\ILogger';
-			$reflection = new ClassReflection($loggerInterface);
+			$reflection = new ReflectionClass($loggerInterface);
 			if ($reflection->hasConstant((string) $level))
 				return $reflection->getConstant((string) $level);
 			else

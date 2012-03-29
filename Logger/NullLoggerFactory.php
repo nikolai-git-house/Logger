@@ -11,7 +11,7 @@ namespace Logger;
  * @author     Matěj Humpál <finwe@finwe.info>
  * @copyright  Copyright (c) 2011 Matěj Humpál
  */
-class NullLoggerFactory extends \Nette\Object implements \Logger\ILoggerFactory
+class NullLoggerFactory implements \Logger\ILoggerFactory
 {
 	/**
 	 * @param array $options

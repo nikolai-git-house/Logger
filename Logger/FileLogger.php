@@ -2,10 +2,6 @@
 
 namespace Logger;
 
-use Nette\Environment;
-use Nette\Object;
-use Nette\Utils\Strings;
-
 /**
  * Filesystem-based implementation of ILogger.
  *
@@ -110,7 +106,7 @@ class FileLogger extends \Logger\AbstractLogger
 	/**
 	 * Returns the directory path where log files reside.
 	 *
-	 * @return string with untranslated environment variables
+	 * @return string
 	 */
 	public function getLogDir()
 	{
@@ -120,10 +116,8 @@ class FileLogger extends \Logger\AbstractLogger
 
 	/**
 	 * Sets the directory path where log files reside.
-	 * You can use environment variables.
 	 *
 	 * @param string $logDir
-	 * @see Environment::expand()
 	 */
 	public function setLogDir($logDir)
 	{
@@ -153,12 +147,12 @@ class FileLogger extends \Logger\AbstractLogger
 	 * 43200 seconds, resulting in a two files per day.
 	 *
 	 * @param int $granularity
-	 * @throws InvalidArgumentException if the grannularity is not a non-negative number
+	 * @throws InvalidArgumentException if the granularity is not a non-negative number
 	 */
 	public function setGranularity($granularity)
 	{
 		if ($granularity < 0)
-			throw new InvalidArgumentException('Granularity must be greater than or equal to 0.');
+			throw new \InvalidArgumentException('Granularity must be greater than or equal to 0.');
 
 		$this->granularity = $granularity;
 		$this->file = NULL;
@@ -167,7 +161,6 @@ class FileLogger extends \Logger\AbstractLogger
 	/**
 	 * Returns the full path to the current log file.
 	 * @return string
-	 * @throws InvalidStateException
 	 */
 	public function getFile()
 	{
@@ -179,9 +172,9 @@ class FileLogger extends \Logger\AbstractLogger
 			} else
 				$timestamp = time();
 
-			$this->file = ($path = Environment::expand($this->logDir))
-				    . (Strings::endsWith($path, '/') ? '' : '/')
-				    . strftime($this->filenameMask, $timestamp);
+			$this->file = ($path = $this->logDir)
+				. (preg_match('~/$~', $path) ? '' : '/')
+				. strftime($this->filenameMask, $timestamp);
 		}
 
 		return $this->file;
@@ -192,7 +185,7 @@ class FileLogger extends \Logger\AbstractLogger
 	 */
 	protected function writeMessage($level, $message)
 	{
-		if (!file_exists($this->getFile())) {
+		if (!file_exists($this->getFile()) && !empty($this->onLogFileCreated)) {
 			$this->onLogFileCreated($this, $this->getFile());
 		}
 
@@ -201,8 +194,9 @@ class FileLogger extends \Logger\AbstractLogger
 		if (!file_put_contents($this->getFile(), $message, FILE_APPEND))
 			throw new \IOException('Write operation failed.');
 
-		$this->onMessage($this, $level, $message);
-
+		if (!empty($this->onMessage)) {
+			$this->onMessage($this, $level, $message);
+		}
 	}
 
 }
