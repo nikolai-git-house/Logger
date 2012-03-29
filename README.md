@@ -1,4 +1,4 @@
-Stackable logger for Nette Framework
+Stackable logger
 ====================================
 
 Logger allowing either log by selected logger or to stack loggers and log to each of them.
