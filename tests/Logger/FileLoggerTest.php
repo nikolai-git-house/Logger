@@ -20,6 +20,11 @@ class FileLoggerTest extends PHPUnit_Framework_TestCase
 		));
 	}
 
+	public function tearDown()
+	{
+		@unlink(__DIR__ . '/logFile.log');
+	}
+
 	public function testDefaultValues()
 	{
 		$this->assertEquals('logFile.log', $this->logger->getFilenameMask());
@@ -33,12 +38,10 @@ class FileLoggerTest extends PHPUnit_Framework_TestCase
 	public function testFile()
 	{
 		$level = Logger\ILogger::NOTICE;
-		$message = 'Message';
+		$message = 'Message %s';
 
-		$this->logger->logMessage($level, $message);
+		$this->logger->logMessage($level, $message, 'with placeholder');
 		$this->assertFileEquals(__DIR__ . '/logFile.log', __DIR__ . '/expectedLogFile.log');
-
-		unlink(__DIR__ . '/logFile.log');
 	}
 
 	public function testSetLogLevel()
