@@ -13,12 +13,20 @@ namespace Logger;
  */
 class FileLoggerFactory implements \Logger\ILoggerFactory
 {
+
+	private $options;
+
+	public function __construct(array $options = array())
+	{
+		$this->options = $options;
+	}
+
 	/**
 	 * @param array $options
 	 * @return Logger\FileLogger
 	 */
-	public function factory($options = array())
+	public function factory(array $options = array())
 	{
-		return new FileLogger($options);
+		return new FileLogger(array_merge($this->options, $options));
 	}
 }

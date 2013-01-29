@@ -16,5 +16,5 @@ interface ILoggerFactory
 	 * @param array $options
 	 * @return Logger\ILogger
 	 */
-	public function factory($options = array());
+	public function factory(array $options = array());
 }
