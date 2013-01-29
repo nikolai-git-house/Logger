@@ -13,12 +13,19 @@ namespace Logger;
  */
 class OutputLoggerFactory implements \Logger\ILoggerFactory
 {
+	private $options;
+
+	public function __construct(array $options = array())
+	{
+		$this->options = $options;
+	}
+
 	/**
 	 * @param array $options
 	 * @return Logger\OutputLogger
 	 */
-	public function factory($options = array())
+	public function factory(array $options = array())
 	{
-		return new OutputLogger($options);
+		return new OutputLogger(array_merge($this->options, $options));
 	}
 }

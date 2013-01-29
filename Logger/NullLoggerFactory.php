@@ -17,7 +17,7 @@ class NullLoggerFactory implements \Logger\ILoggerFactory
 	 * @param array $options
 	 * @return Logger\NullLogger
 	 */
-	public function factory($options = array())
+	public function factory(array $options = array())
 	{
 		return new NullLogger($options);
 	}
