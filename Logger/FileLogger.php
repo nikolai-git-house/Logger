@@ -192,7 +192,7 @@ class FileLogger extends \Logger\AbstractLogger
 		// Please note that FILE_APPEND operation is atomic (tested):
 		// http://us2.php.net/manual/en/function.file-put-contents.php
 		if (!file_put_contents($this->getFile(), $message, FILE_APPEND))
-			throw new \IOException('Write operation failed.');
+			throw new \Logger\IOException(sprintf('Write operation failed for file "%s"', $this->getFile()));
 
 		if (!empty($this->onMessage)) {
 			$this->onMessage($this, $level, $message);
